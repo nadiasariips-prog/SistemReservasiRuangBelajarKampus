@@ -1,0 +1,465 @@
+package com.mycompany.sistemreservasiruangbelajarkampus;
+
+import java.util.Scanner;
+public class SistemReservasiRuangBelajarKampus {
+
+    public static void cariReservasi(
+            String kode,
+            Reservasi[] daftarReservasi,
+            int jumlahReservasi) {
+
+        System.out.println(
+            "\nHasil pencarian berdasarkan kode: " + kode);
+
+        boolean ditemukan = false;
+
+        for (int i = 0; i < jumlahReservasi; i++) {
+            if (daftarReservasi[i]
+                    .getKodeReservasi()
+                    .equalsIgnoreCase(kode)) {
+G
+                daftarReservasi[i].tampilkanInfo();
+                daftarReservasi[i].cekFasilitas();
+                ditemukan = true;
+            }
+        }
+        if (!ditemukan) {
+            System.out.println("Data reservasi tidak ditemukan.");
+        }
+    }
+
+    public static void cariReservasi(
+            String nama,
+            String tanggal,
+            Reservasi[] daftarReservasi,
+            int jumlahReservasi) {
+
+        System.out.println(
+            "\nHasil pencarian pemesan dan tanggal: "
+            + nama + " | " + tanggal);
+
+        boolean ditemukan = false;
+        for (int i = 0; i < jumlahReservasi; i++) {
+            if (daftarReservasi[i]
+                    .getPengguna()
+                    .getNama()
+                    .equalsIgnoreCase(nama)
+                    &&
+                daftarReservasi[i]
+                    .getTanggal()
+                    .equalsIgnoreCase(tanggal)) {
+
+                daftarReservasi[i].tampilkanInfo();
+                daftarReservasi[i].cekFasilitas();
+                ditemukan = true;
+            }
+        }
+        if (!ditemukan) {
+            System.out.println("Data reservasi tidak ditemukan.");
+        }
+    }
+
+    public static void tampilkanSemua(
+            Reservasi[] daftarReservasi,
+            int jumlahReservasi) {
+
+        System.out.println(
+            "\n================ DAFTAR RESERVASI ================");
+
+        if (jumlahReservasi == 0) {
+            System.out.println("Belum ada data reservasi.");
+            return;
+        }
+        for (int i = 0; i < jumlahReservasi; i++) {
+            System.out.println("\nData ke-" + (i + 1));
+            daftarReservasi[i].tampilkanInfo();
+            daftarReservasi[i].cekFasilitas();
+        }
+
+        System.out.println(
+            "\nTotal objek Reservasi berhasil dibuat: "
+            + Reservasi.getTotalReservasi());
+    }
+
+
+    public static void main(String[] args) {
+        try (Scanner scanner = new Scanner(System.in)) {
+            Reservasi[] daftarReservasi = new Reservasi[20];
+            int jumlahReservasi = 0;
+            boolean isRunning = true;
+
+            daftarReservasi[jumlahReservasi++] =
+                new RuangKelas(
+                    "R-001",
+                    new Pengguna(
+                        "Alya Putri",
+                        "251101001",
+                        "081234567890"
+                    ),
+                    "05-10-2026",
+                    2,
+                    30,
+                    true);
+
+            daftarReservasi[jumlahReservasi++] =
+                new RuangLaboratorium(
+                    "R-002",
+                    new Pengguna(
+                        "Bima Saputra",
+                        "251101002",
+                        "082345678901"
+                    ),
+                    "06-10-2026",
+                    3,
+                    25,
+                    "Lab Pemrograman");
+
+            daftarReservasi[jumlahReservasi++] =
+                new RuangKelas(
+                    "R-003",
+                    new Pengguna(
+                        "Citra Lestari",
+                        "251101003",
+                        "083456789012"
+                    ),
+                    "07-10-2026",
+                    1,
+                    20,
+                    false);
+
+            System.out.println(
+                "====================================================");
+            System.out.println(
+                "       SISTEM RESERVASI RUANG BELAJAR KAMPUS       ");
+            System.out.println(
+                "====================================================");
+
+            while (isRunning) {
+
+                System.out.println("\n---------------- MENU UTAMA ----------------");
+                System.out.println("1. Tambah Data Reservasi");
+                System.out.println("2. Tampilkan Seluruh Data");
+                System.out.println( "3. Pencarian / Aksi Khusus");
+                System.out.println("4. Keluar");
+                System.out.print("Pilih menu (1-4): " );
+                int pilihan;
+
+                try {
+                    pilihan =
+                        Integer.parseInt(
+                            scanner.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println( "Input harus berupa angka." );
+                    continue;
+                }
+
+                switch (pilihan) {
+
+                    case 1:
+
+                        if (jumlahReservasi >=
+                            daftarReservasi.length) {
+                            System.out.println("Kapasitas data reservasi sudah penuh."
+                            );
+                            break;
+                        }
+
+                        System.out.println("\n--- TAMBAH RESERVASI ---"
+                        );
+                        System.out.println("1. Ruang Kelas"
+                        );
+                        System.out.println("2. Laboratorium"
+                        );
+                        System.out.print("Pilih tipe ruangan (1/2): "
+                        );
+                        int jenis;
+
+                        try {
+                            jenis =
+                                Integer.parseInt(
+                                    scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println( "Pilihan harus berupa angka."
+                            );
+                            break;
+                        }
+
+                        if (jenis != 1 && jenis != 2) {
+
+                            System.out.println(
+                                "Jenis ruangan tidak valid."
+                            );
+
+                            break;
+                        }
+
+
+                        System.out.print(
+                            "Kode reservasi: "
+                        );
+
+                        String kode =
+                            scanner.nextLine();
+
+
+                        System.out.print(
+                            "Nama pemesan: "
+                        );
+
+                        String nama =
+                            scanner.nextLine();
+
+
+                        System.out.print(
+                            "NIM: "
+                        );
+
+                        String nim =
+                            scanner.nextLine();
+
+
+                        System.out.print(
+                            "Nomor HP (10-15 digit): "
+                        );
+
+                        String nomorHP =
+                            scanner.nextLine();
+
+
+                        System.out.print(
+                            "Tanggal reservasi (dd-mm-yyyy): "
+                        );
+
+                        String tanggal =
+                            scanner.nextLine();
+
+
+                        System.out.print(
+                            "Durasi (jam, 1-12): "
+                        );
+
+                        int durasi;
+
+                        try {
+
+                            durasi =
+                                Integer.parseInt(
+                                    scanner.nextLine()
+                                );
+
+                        } catch (NumberFormatException e) {
+
+                            System.out.println(
+                                "Durasi harus berupa angka."
+                            );
+
+                            break;
+                        }
+
+                        Pengguna pengguna =
+                            new Pengguna(
+                                nama,
+                                nim,
+                                nomorHP
+                            );
+
+                        if (jenis == 1) {
+
+                            System.out.print(
+                                "Kapasitas ruangan (5-100 orang): "
+                            );
+
+                            int kapasitas;
+
+                            try {
+
+                                kapasitas =
+                                    Integer.parseInt(
+                                        scanner.nextLine()
+                                    );
+
+                            } catch (NumberFormatException e) {
+
+                                System.out.println(
+                                    "Kapasitas harus berupa angka."
+                                );
+
+                                break;
+                            }
+
+
+                            System.out.print(
+                                "Memiliki proyektor? (y/n): "
+                            );
+
+                            boolean proyektor =
+                                scanner
+                                    .nextLine()
+                                    .equalsIgnoreCase("y");
+
+
+                            daftarReservasi[jumlahReservasi++] =
+                                new RuangKelas(
+                                    kode,
+                                    pengguna,
+                                    tanggal,
+                                    durasi,
+                                    kapasitas,
+                                    proyektor
+                                );
+
+
+                        } else {
+
+                            System.out.print(
+                                "Jumlah komputer (1-100): "
+                            );
+
+                            int komputer;
+
+                            try {
+
+                                komputer =
+                                    Integer.parseInt(
+                                        scanner.nextLine()
+                                    );
+
+                            } catch (NumberFormatException e) {
+
+                                System.out.println(
+                                    "Jumlah komputer harus berupa angka."
+                                );
+
+                                break;
+                            }
+
+
+                            System.out.print(
+                                "Jenis laboratorium: "
+                            );
+
+                            String jenisLab =
+                                scanner.nextLine();
+
+
+                            daftarReservasi[jumlahReservasi++] =
+                                new RuangLaboratorium(
+                                    kode,
+                                    pengguna,
+                                    tanggal,
+                                    durasi,
+                                    komputer,
+                                    jenisLab
+                                );
+                        }
+
+
+                        System.out.println(
+                            "Reservasi berhasil ditambahkan."
+                        );
+
+                        break;
+
+                    case 2:
+
+                        tampilkanSemua(
+                            daftarReservasi,
+                            jumlahReservasi
+                        );
+
+                        break;
+
+                    case 3:
+
+                        System.out.println(
+                            "\n--- PENCARIAN / AKSI KHUSUS ---"
+                        );
+
+                        System.out.println(
+                            "1. Cari berdasarkan kode reservasi"
+                        );
+
+                        System.out.println(
+                            "2. Cari berdasarkan nama dan tanggal"
+                        );
+
+                        System.out.print(
+                            "Pilih (1/2): "
+                        );
+
+
+                        int mode;
+
+                        try {
+
+                            mode =
+                                Integer.parseInt(
+                                    scanner.nextLine()
+                                );
+
+                        } catch (NumberFormatException e) {
+
+                            System.out.println(
+                                "Pilihan harus berupa angka."
+                            );
+
+                            break;
+                        }
+
+
+                        if (mode == 1) {
+
+                            System.out.print(
+                                "Masukkan kode reservasi: "
+                            );
+
+                            String kodeCari =
+                                scanner.nextLine();
+
+                            cariReservasi(
+                                kodeCari,
+                                daftarReservasi,
+                                jumlahReservasi
+                            );
+
+
+                        } else if (mode == 2) {
+
+                            System.out.print(
+                                "Masukkan nama pemesan: "
+                            );
+
+                            String namaCari =
+                                scanner.nextLine();
+
+
+                            System.out.print(
+                                "Masukkan tanggal: "
+                            );
+
+                            String tanggalCari =
+                                scanner.nextLine();
+
+                            cariReservasi(
+                                namaCari,
+                                tanggalCari,
+                                daftarReservasi,
+                                jumlahReservasi
+                            );
+                        } else {
+                            System.out.println("Pilihan tidak valid." );
+                        }
+
+                        break;
+
+                    case 4:
+                        System.out.println("\nTerima kasih telah menggunakan "+ "Sistem Reservasi Ruang Belajar Kampus.");
+                        isRunning = false;
+                        break;
+                    default:
+                        System.out.println("Pilihan menu tidak tersedia.");                           
+                }
+            }
+        }
+    }
+}
