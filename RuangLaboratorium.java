@@ -1,5 +1,5 @@
 package com.mycompany.sistemreservasiruangbelajarkampus;
-public class RuangLaboratorium extends Reservasi {
+public class RuangLaboratorium extends Reservasi implements DapatDicekFasilitas{
 
     private int jumlahKomputer;
     private String jenisLab;
@@ -49,6 +49,22 @@ public class RuangLaboratorium extends Reservasi {
         super.cekFasilitas();
         System.out.println(
             "         Fasilitas: komputer, jaringan internet, dan perangkat praktikum."
+        );
+    }
+     @Override
+    public void tampilkanFasilitasTambahan() {
+        System.out.println(
+            "Pengecekan tambahan: " + jumlahKomputer
+            + " komputer tersedia di " + jenisLab + "."
+        );
+    }
+    
+    @Override
+    public void tampilkanDetailRuangan() {
+        System.out.printf(
+            "Detail Laboratorium: %s, %d komputer.%n",
+            jenisLab,
+            jumlahKomputer
         );
     }
 }

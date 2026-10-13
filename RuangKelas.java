@@ -1,6 +1,6 @@
 package com.mycompany.sistemreservasiruangbelajarkampus;
 
-public class RuangKelas extends Reservasi {
+public class RuangKelas extends Reservasi implements DapatDipesan, DapatDicekFasilitas {
 
     private int kapasitas;
     private boolean memilikiProyektor;
@@ -58,6 +58,31 @@ public class RuangKelas extends Reservasi {
 
         System.out.println(
             "         Fasilitas: meja, kursi, papan tulis, dan proyektor sesuai pilihan."
+        );
+    }
+    @Override
+    public void konfirmasiPemesanan() {
+        System.out.println(
+            "Konfirmasi: pemesanan ruang kelas "
+            + getKodeReservasi() + " diproses."
+        );
+    }
+
+    @Override
+    public void tampilkanFasilitasTambahan() {
+        System.out.println(
+            "Fasilitas tambahan ruang kelas: proyektor "
+            + (memilikiProyektor
+                ? "tersedia."
+                : "tidak tersedia.")
+        );
+    }
+    
+    @Override
+    public void tampilkanDetailRuangan() {
+        System.out.printf(
+            "Detail Ruang Kelas: kapasitas %d orang.%n",
+            kapasitas
         );
     }
 }

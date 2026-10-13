@@ -1,6 +1,6 @@
 package com.mycompany.sistemreservasiruangbelajarkampus;
 
-public class Reservasi {
+public abstract class Reservasi {
     private String kodeReservasi;
     private Pengguna pengguna;
     private String tanggal;
@@ -79,4 +79,6 @@ public class Reservasi {
     public void cekFasilitas() {
         System.out.println("Fasilitas mengikuti ruangan yang dipilih.");
     }
+    
+    public abstract void tampilkanDetailRuangan();
 }

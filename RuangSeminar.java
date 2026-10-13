@@ -1,5 +1,5 @@
 package com.mycompany.sistemreservasiruangbelajarkampus;
-public class RuangSeminar extends Reservasi {
+public class RuangSeminar extends Reservasi implements DapatDipesan{
     private int kapasitas;
     private boolean memilikiSoundSystem;
     public RuangSeminar(
@@ -57,6 +57,20 @@ public class RuangSeminar extends Reservasi {
 
         System.out.println(
             "         Fasilitas: kursi peserta, meja, proyektor, dan sound system."
+        );
+    }
+    @Override
+    public void konfirmasiPemesanan() {
+        System.out.println(
+            "Konfirmasi: pemesanan ruang seminar "
+            + getKodeReservasi() + " diproses."
+        );
+    }
+    @Override
+    public void tampilkanDetailRuangan() {
+        System.out.printf(
+            "Detail Ruang Seminar: kapasitas %d orang.%n",
+            kapasitas
         );
     }
 }

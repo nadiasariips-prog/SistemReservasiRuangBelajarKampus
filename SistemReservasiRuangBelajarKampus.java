@@ -89,6 +89,21 @@ public class SistemReservasiRuangBelajarKampus {
             System.out.println(
                 "Memeriksa fasilitas:");
             reservasi.cekFasilitas();
+            
+            if (reservasi instanceof DapatDipesan) {
+                DapatDipesan dapatDipesan =
+                    (DapatDipesan) reservasi;
+
+                dapatDipesan.konfirmasiPemesanan();
+            }
+
+            if (reservasi instanceof DapatDicekFasilitas) {
+                DapatDicekFasilitas dapatDicek =
+                    (DapatDicekFasilitas) reservasi;
+
+                dapatDicek.tampilkanFasilitasTambahan();
+            }
+
             System.out.println(
                 "Reservasi berhasil diproses.");  
     }
