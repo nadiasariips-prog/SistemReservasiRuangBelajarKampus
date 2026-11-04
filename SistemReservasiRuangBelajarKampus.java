@@ -1,8 +1,6 @@
 package com.mycompany.sistemreservasiruangbelajarkampus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class SistemReservasiRuangBelajarKampus {
@@ -101,16 +99,28 @@ public static void tampilkanSemua(
     }
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
-           ArrayList<Reservasi> daftarReservasi =
-                new ArrayList<>();
-           HashMap<String, String> dataAnggota =
-                new HashMap<>();
+                            
+                 PengelolaReservasi pengelola =
+                         new PengelolaReservasi();
+
+                 
+                 ArrayList<Reservasi> daftarReservasi =
+                         pengelola.getDaftarReservasi();
+
+                
+                 pengelola.tambahPengguna(
+                         new Pengguna("Alya Putri", "251101001", "081234567890")
+                 );
+
+                 pengelola.tambahPengguna(
+                         new Pengguna("Bima Saputra", "251101002", "082345678901")
+                 );
+
+                 pengelola.tambahPengguna(
+                         new Pengguna("Citra Lestari", "251101003", "083456789012")
+                 );
            
-           dataAnggota.put("251101001", "Alya Putri");
-           dataAnggota.put("251101002", "Bima Saputra");
-           dataAnggota.put("251101003", "Citra Lestari");
-           
-           daftarReservasi.add(
+           pengelola.tambahReservasi(
                 new RuangKelas(
                     "R-001",
                     new Pengguna(
@@ -126,7 +136,7 @@ public static void tampilkanSemua(
             );
 
          
-            daftarReservasi.add(
+           pengelola.tambahReservasi(
                 new RuangLaboratorium(
                     "R-002",
                     new Pengguna(
@@ -142,7 +152,7 @@ public static void tampilkanSemua(
             );
 
           
-            daftarReservasi.add(
+            pengelola.tambahReservasi(
                 new RuangKelas(
                     "R-003",
                     new Pengguna(
@@ -158,7 +168,7 @@ public static void tampilkanSemua(
             );
 
           
-            daftarReservasi.add(
+            pengelola.tambahReservasi(
                 new RuangSeminar(
                     "R-004",
                     new Pengguna(
@@ -185,9 +195,10 @@ public static void tampilkanSemua(
             System.out.println("1. Tambah Data Reservasi");
             System.out.println("2. Tampilkan Seluruh Data");
             System.out.println("3. Pencarian / Aksi Khusus");
-            System.out.println("4. Kelola Anggota (HashMap)");
-            System.out.println("5. Keluar");
-            System.out.print("Pilih menu (1-5): ");
+            System.out.println("4. Kelola Pengguna (HashMap)");
+            System.out.println("5. Lihat Fasilitas Kampus (Composition)");
+            System.out.println("6. Keluar");
+            System.out.print("Pilih menu (1-6): ");
                 int pilihan;
 
                 try {
@@ -291,7 +302,7 @@ public static void tampilkanSemua(
                             boolean proyektor =
                                     scanner.nextLine().equalsIgnoreCase("y");
 
-                            daftarReservasi.add(
+                            pengelola.tambahReservasi(
                                 new RuangKelas(
                                     kode, pengguna, tanggal,
                                     durasi, kapasitas, proyektor
@@ -317,7 +328,7 @@ public static void tampilkanSemua(
                                 break;
                             }
 
-                            daftarReservasi.add(
+                           pengelola.tambahReservasi(
                                 new RuangLaboratorium(
                                     kode, pengguna, tanggal,
                                     durasi, komputer, jenisLab
@@ -344,13 +355,14 @@ public static void tampilkanSemua(
                             boolean soundSystem =
                                     scanner.nextLine().equalsIgnoreCase("y");
 
-                            daftarReservasi.add(
+                            pengelola.tambahReservasi(
                                 new RuangSeminar(
                                     kode, pengguna, tanggal,
                                     durasi, kapasitas, soundSystem
                                 )
                             );
                         }
+                        pengelola.tambahPengguna(pengguna);
 
                         System.out.println("Reservasi berhasil ditambahkan.");
                         break;
@@ -420,10 +432,13 @@ public static void tampilkanSemua(
                                 }
 
                                 if (nomor >= 1 && nomor <= daftarReservasi.size()) {
-                                    Reservasi reservasiDipilih =
+                            Reservasi reservasiDipilih =
                                         daftarReservasi.get(nomor - 1);
 
-                                    prosesReservasi(reservasiDipilih);
+                                TransaksiReservasi.prosesTransaksi(
+                                        reservasiDipilih.getPengguna(),
+                                        reservasiDipilih
+                                );
 
                                 } else {
                                     System.out.println("Nomor reservasi tidak valid.");
@@ -438,60 +453,94 @@ public static void tampilkanSemua(
                     }
 
                     case 4: {
-                        System.out.println("\n--- KELOLA ANGGOTA (HashMap) ---");
-                        System.out.println("1. Tambah Anggota Baru");
-                        System.out.println("2. Cari Anggota via NIM");
-                        System.out.println("3. Tampilkan Semua Anggota");
+
+                        System.out.println("\n--- KELOLA PENGGUNA ---");
+
+                        System.out.println("1. Tambah Pengguna");
+                        System.out.println("2. Cari Pengguna");
+                        System.out.println("3. Tampilkan Semua Pengguna");
+
                         System.out.print("Pilih: ");
 
                         int menuAnggota;
 
                         try {
                             menuAnggota = Integer.parseInt(scanner.nextLine());
+
                         } catch (NumberFormatException e) {
+
                             System.out.println("Pilihan harus berupa angka.");
                             break;
                         }
 
                         if (menuAnggota == 1) {
+
                             System.out.print("Masukkan NIM: ");
                             String nimBaru = scanner.nextLine();
 
                             System.out.print("Masukkan Nama: ");
                             String namaBaru = scanner.nextLine();
 
-                            dataAnggota.put(nimBaru, namaBaru);
+                            System.out.print("Masukkan Nomor HP: ");
+                            String hpBaru = scanner.nextLine();
 
-                            System.out.println("Berhasil menambahkan anggota!");
+                            if (nimBaru.trim().isEmpty()
+                                    || namaBaru.trim().isEmpty()
+                                    || hpBaru.trim().isEmpty()) {
 
-                        } else if (menuAnggota == 2) {
-                            System.out.print("Masukkan NIM yang dicari: ");
-                            String cariNim = scanner.nextLine();
+                                System.out.println("Data tidak boleh kosong.");
 
-                            if (dataAnggota.containsKey(cariNim)) {
-                                System.out.println("Nama: " + dataAnggota.get(cariNim));
+                            } else if (pengelola.cariPengguna(nimBaru) != null) {
+
+                                System.out.println("NIM sudah terdaftar.");
+
                             } else {
-                                System.out.println("Anggota tidak ditemukan.");
-                            }
 
-                        } else if (menuAnggota == 3) {
-                            System.out.println("Daftar seluruh anggota:");
-
-                            for (String anggotaNim : dataAnggota.keySet()) {
-                                System.out.println(
-                                    "NIM: " + anggotaNim +
-                                    " | Nama: " + dataAnggota.get(anggotaNim)
+                                pengelola.tambahPengguna(
+                                        new Pengguna(namaBaru, nimBaru, hpBaru)
                                 );
                             }
 
+                        } else if (menuAnggota == 2) {
+
+                            System.out.print("Masukkan NIM yang dicari: ");
+
+                            String cariNim = scanner.nextLine();
+
+                            Pengguna ditemukan =
+                                    pengelola.cariPengguna(cariNim);
+
+                            if (ditemukan != null) {
+
+                                System.out.println("\nPengguna ditemukan:");
+
+                                ditemukan.tampilkanPengguna();
+
+                            } else {
+
+                                System.out.println("Pengguna tidak ditemukan.");
+                            }
+
+                        } else if (menuAnggota == 3) {
+
+                            pengelola.tampilkanSemuaPengguna();
+
                         } else {
+
                             System.out.println("Pilihan tidak tersedia.");
                         }
 
                         break;
                     }
-
                     case 5: {
+
+                        System.out.println("\n--- INFORMASI FASILITAS KAMPUS ---");
+
+                        pengelola.tampilkanFasilitasKampus();
+
+                        break;
+                    }
+                    case 6: {
                         System.out.println(
                             "Terima kasih telah menggunakan " +
                             "Sistem Reservasi Ruang Belajar Kampus."
