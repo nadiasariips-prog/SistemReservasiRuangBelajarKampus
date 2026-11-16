@@ -1,6 +1,10 @@
 package com.mycompany.sistemreservasiruangbelajarkampus;
 
-public abstract class Reservasi {
+import java.io.Serializable;
+
+public abstract class Reservasi implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private String kodeReservasi;
     private Pengguna pengguna;
     private String tanggal;

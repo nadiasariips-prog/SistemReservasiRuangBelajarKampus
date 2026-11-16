@@ -1,5 +1,6 @@
 package com.mycompany.sistemreservasiruangbelajarkampus;
 
+import com.mycompany.sistemreservasiruangbelajarkampus.PenyimpananReservasi;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -100,14 +101,14 @@ public static void tampilkanSemua(
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
                             
-                 PengelolaReservasi pengelola =
-                         new PengelolaReservasi();
+                PengelolaReservasi pengelola =
+        PenyimpananReservasi.muatData();
 
                  
                  ArrayList<Reservasi> daftarReservasi =
                          pengelola.getDaftarReservasi();
+                 if (daftarReservasi.isEmpty()) {
 
-                
                  pengelola.tambahPengguna(
                          new Pengguna("Alya Putri", "251101001", "081234567890")
                  );
@@ -191,14 +192,17 @@ public static void tampilkanSemua(
             boolean isRunning = true;
 
             while (isRunning){
-            System.out.println("\n---------------- MENU UTAMA ----------------");
             System.out.println("1. Tambah Data Reservasi");
             System.out.println("2. Tampilkan Seluruh Data");
             System.out.println("3. Pencarian / Aksi Khusus");
             System.out.println("4. Kelola Pengguna (HashMap)");
             System.out.println("5. Lihat Fasilitas Kampus (Composition)");
-            System.out.println("6. Keluar");
-            System.out.print("Pilih menu (1-6): ");
+            System.out.println("6. Baca Log Aktivitas");
+            System.out.println("7. Muat Data dari File");
+            System.out.println("8. Simpan Data ke File");
+            System.out.println("9. Simpan dan Keluar");
+            
+            System.out.print("Pilih menu (1-9): ");
                 int pilihan;
 
                 try {
@@ -364,6 +368,13 @@ public static void tampilkanSemua(
                         }
                         pengelola.tambahPengguna(pengguna);
 
+                        // Mencatat aktivitas reservasi
+                        PenyimpananReservasi.catatLog(
+                            "Reservasi baru ditambahkan: "
+                            + kode + " | Pemesan: " + nama
+                            + " | Tanggal: " + tanggal
+                        );
+
                         System.out.println("Reservasi berhasil ditambahkan.");
                         break;
 
@@ -390,9 +401,9 @@ public static void tampilkanSemua(
                             break;
                         }
 
-                        if (mode == 1) {
-                            System.out.print("Masukkan kode reservasi: ");
-                            String kodeCari = scanner.nextLine();
+                                if (mode == 1) {
+                                    System.out.print("Masukkan kode reservasi: ");
+                                    String kodeCari = scanner.nextLine();
 
                             cariReservasi(kodeCari, daftarReservasi);
 
@@ -452,29 +463,23 @@ public static void tampilkanSemua(
                         break;
                     }
 
-                    case 4: {
-
+                                        case 4: {
                         System.out.println("\n--- KELOLA PENGGUNA ---");
-
                         System.out.println("1. Tambah Pengguna");
                         System.out.println("2. Cari Pengguna");
                         System.out.println("3. Tampilkan Semua Pengguna");
-
                         System.out.print("Pilih: ");
 
                         int menuAnggota;
 
                         try {
                             menuAnggota = Integer.parseInt(scanner.nextLine());
-
                         } catch (NumberFormatException e) {
-
                             System.out.println("Pilihan harus berupa angka.");
                             break;
                         }
 
                         if (menuAnggota == 1) {
-
                             System.out.print("Masukkan NIM: ");
                             String nimBaru = scanner.nextLine();
 
@@ -487,74 +492,72 @@ public static void tampilkanSemua(
                             if (nimBaru.trim().isEmpty()
                                     || namaBaru.trim().isEmpty()
                                     || hpBaru.trim().isEmpty()) {
-
                                 System.out.println("Data tidak boleh kosong.");
-
                             } else if (pengelola.cariPengguna(nimBaru) != null) {
-
                                 System.out.println("NIM sudah terdaftar.");
-
                             } else {
-
                                 pengelola.tambahPengguna(
-                                        new Pengguna(namaBaru, nimBaru, hpBaru)
+                                    new Pengguna(namaBaru, nimBaru, hpBaru)
                                 );
                             }
 
                         } else if (menuAnggota == 2) {
-
                             System.out.print("Masukkan NIM yang dicari: ");
-
                             String cariNim = scanner.nextLine();
 
-                            Pengguna ditemukan =
-                                    pengelola.cariPengguna(cariNim);
+                            Pengguna ditemukan = pengelola.cariPengguna(cariNim);
 
                             if (ditemukan != null) {
-
                                 System.out.println("\nPengguna ditemukan:");
-
                                 ditemukan.tampilkanPengguna();
-
                             } else {
-
                                 System.out.println("Pengguna tidak ditemukan.");
                             }
 
                         } else if (menuAnggota == 3) {
-
                             pengelola.tampilkanSemuaPengguna();
-
                         } else {
-
                             System.out.println("Pilihan tidak tersedia.");
                         }
-
                         break;
                     }
+
                     case 5: {
-
                         System.out.println("\n--- INFORMASI FASILITAS KAMPUS ---");
-
                         pengelola.tampilkanFasilitasKampus();
-
                         break;
                     }
-                    case 6: {
-                        System.out.println(
-                            "Terima kasih telah menggunakan " +
-                            "Sistem Reservasi Ruang Belajar Kampus."
-                        );
 
+                    case 6: {
+                        PenyimpananReservasi.bacaLog();
+                        break;
+                    }
+
+                    case 7: {
+                        pengelola = PenyimpananReservasi.muatData();
+                        daftarReservasi = pengelola.getDaftarReservasi();
+                        System.out.println("Data berhasil dimuat.");
+                        break;
+                    }
+
+                    case 8: {
+                        PenyimpananReservasi.simpanData(pengelola);
+                        break;
+                    }
+
+                    case 9: {
+                        System.out.println("Menyimpan seluruh data...");
+                        PenyimpananReservasi.simpanData(pengelola);
+                        System.out.println("Terima kasih telah menggunakan sistem reservasi.");
                         isRunning = false;
                         break;
                     }
 
                     default:
                         System.out.println("Pilihan menu tidak tersedia.");
-
-                } 
-            } 
-        } 
-    } 
-} 
+                }
+            }
+        }
+    }
+}
+}

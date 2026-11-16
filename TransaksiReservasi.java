@@ -1,18 +1,18 @@
 package com.mycompany.sistemreservasiruangbelajarkampus;
 
+import com.mycompany.sistemreservasiruangbelajarkampus.PenyimpananReservasi;
+
 public class TransaksiReservasi {
 
     public static void prosesTransaksi(
             Pengguna pengguna,
             Reservasi reservasi) {
-
         System.out.println("\n===== TRANSAKSI RESERVASI =====");
 
         if (pengguna == null || reservasi == null) {
             System.out.println("Transaksi gagal diproses.");
             return;
         }
-
         System.out.println(
                 "Nama Pengguna : " + pengguna.getNama()
         );
@@ -20,7 +20,6 @@ public class TransaksiReservasi {
         System.out.println(
                 "NIM           : " + pengguna.getNim()
         );
-
         System.out.println(
                 "Kode Reservasi: " + reservasi.getKodeReservasi()
         );
@@ -28,13 +27,11 @@ public class TransaksiReservasi {
         System.out.println(
                 "Tanggal       : " + reservasi.getTanggal()
         );
-
         System.out.println(
                 "Durasi        : " + reservasi.getDurasiJam() + " jam"
         );
 
         System.out.println("\nDetail Ruangan:");
-
         reservasi.tampilkanDetailRuangan();
 
         if (reservasi instanceof DapatDipesan) {
@@ -46,5 +43,16 @@ public class TransaksiReservasi {
         }
 
         System.out.println("\nStatus: Transaksi berhasil diproses.");
+        PenyimpananReservasi.catatLog(
+        "Transaksi reservasi: "
+        + reservasi.getKodeReservasi()
+        + " | Nama: "
+        + pengguna.getNama()
+        + " | Tanggal: "
+        + reservasi.getTanggal()
+        + " | Durasi: "
+        + reservasi.getDurasiJam()
+        + " jam"
+);
     }
 }

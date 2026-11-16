@@ -1,6 +1,10 @@
 package com.mycompany.sistemreservasiruangbelajarkampus;
 
-public class Pengguna {
+import java.io.Serializable;
+
+public class Pengguna implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private String nama;
     private String nim;
     private String nomorHP;
